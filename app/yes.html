@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yay! 🎉</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="yes-page">
+
+  <div class="container">
+    <h1 class="yes-title">Knew you would say yes! 🎉</h1>
+
+    <div class="gif-container">
+      <img src="happy.gif" alt="cute cat">
+    </div>
+
+    <p class="yes-message">You’ve made my heart so full! 💖💕</p>
+  </div>
+
+  <audio id="bg-music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <button id="music-toggle" aria-label="Toggle music">🔊</button>
+
+  <!-- ✅ 1) Cargar librería confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- ✅ 2) Disparar confetti AL CARGAR yes.html -->
+  <script>
+    window.addEventListener("load", () => {
+      if (window.confetti) {
+        confetti({
+          particleCount: 250,
+          spread: 90,
+          origin: { y: 0.6 }
+        });
+      } else {
+        console.log("❌ Confetti no cargó (sin internet o CDN bloqueado).");
+      }
+    });
+  </script>
+
+  <!-- ✅ 3) Tu JS solo para música (opcional) -->
+  <script src="yes.js"></script>
+</body>
+</html>
