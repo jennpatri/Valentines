@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+</head>
 
 <body>
   <div class="container">
@@ -22,6 +23,14 @@
 
     <p id="no-message" class="no-message"></p>
   </div>
+
+  <!-- ✅ Audio desde la primera página -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="crazier.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- (Opcional) botón de sonido también en la primera página -->
+  <button id="music-toggle" aria-label="Toggle music">🔊</button>
 
   <script src="script.js"></script>
 </body>

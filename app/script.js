@@ -2,16 +2,64 @@ const noBtn = document.getElementById("no-btn");
 const yesBtn = document.getElementById("yes-btn");
 const message = document.getElementById("no-message");
 
+// ✅ Música
+const music = document.getElementById("bg-music");
+const musicToggle = document.getElementById("music-toggle");
+
+let musicStarted = false;
+
+function tryStartMusic() {
+  if (!music || musicStarted) return;
+
+  music.volume = 0.6;
+  music.play()
+    .then(() => {
+      musicStarted = true;
+      localStorage.setItem("musicAllowed", "1"); // para yes.html
+      if (musicToggle) musicToggle.textContent = "🔊";
+    })
+    .catch(() => {
+      // Si el navegador lo bloquea, no pasa nada; se activará en otro click
+    });
+}
+
+// ✅ primer gesto del usuario = música
+["click", "touchstart", "keydown"].forEach(evt => {
+  window.addEventListener(evt, tryStartMusic, { once: true });
+});
+
+// ✅ botón para pausar/activar
+if (musicToggle) {
+  musicToggle.addEventListener("click", (e) => {
+    e.stopPropagation(); // para no disparar otras cosas
+    if (!music) return;
+
+    if (music.paused) {
+      music.play().then(() => {
+        musicStarted = true;
+        localStorage.setItem("musicAllowed", "1");
+        musicToggle.textContent = "🔊";
+      }).catch(() => {});
+    } else {
+      music.pause();
+      musicToggle.textContent = "🔇";
+    }
+  });
+}
+
 let noCount = 0;
 let canEscape = false;
 
-// YES -> va a yes.html
+// YES -> intenta música + va a yes.html
 yesBtn.addEventListener("click", () => {
+  tryStartMusic();
   window.location.href = "yes.html";
 });
 
-// NO -> cambia mensajes + crece YES + se hace pequeño NO
+// NO -> (tu lógica)
 noBtn.addEventListener("click", () => {
+  tryStartMusic();
+
   noCount++;
 
   if (noCount === 1) message.textContent = "Are you sure? 🥺";
@@ -21,19 +69,17 @@ noBtn.addEventListener("click", () => {
   else {
     message.textContent = "You can't catch me 😈";
     canEscape = true;
-    moveButton(); // en el 6to click se mueve una vez
+    moveButton();
   }
 
   growYes();
-  shrinkNo(); // ✅ NO se hace más pequeño en cada intento
+  shrinkNo();
 });
 
-// Después del 6to intento, se escapa al pasar el mouse
 noBtn.addEventListener("mouseover", () => {
   if (canEscape) moveButton();
 });
 
-// (Opcional para móviles) después del 6to, se escapa al tocar
 noBtn.addEventListener("touchstart", () => {
   if (canEscape) moveButton();
 });
@@ -45,10 +91,9 @@ function growYes() {
 
 function shrinkNo() {
   const currentSize = parseFloat(window.getComputedStyle(noBtn).fontSize);
-  const newSize = Math.max(10, currentSize - 2); // mínimo 10px
+  const newSize = Math.max(10, currentSize - 2);
   noBtn.style.fontSize = newSize + "px";
 
-  // también reduce padding un poco (para que realmente se vea más pequeño)
   const padY = Math.max(6, 15 - noCount);
   const padX = Math.max(10, 30 - noCount * 2);
   noBtn.style.padding = `${padY}px ${padX}px`;
